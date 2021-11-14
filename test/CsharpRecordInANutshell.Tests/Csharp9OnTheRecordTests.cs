@@ -4,10 +4,11 @@ using Xunit;
 
 namespace CsharpRecordInANutshell.Tests;
 
+/// <summary>
+/// https://devblogs.microsoft.com/dotnet/c-9-0-on-the-record/
+/// </summary>
 public class Csharp9OnTheRecordTests
 {
-    // https://devblogs.microsoft.com/dotnet/c-9-0-on-the-record/
-
     public class Person
     {
         public string? FirstName { get; set; }
@@ -54,41 +55,41 @@ public class Csharp9OnTheRecordTests
             get => lastName;
             init => lastName = (value ?? throw new ArgumentNullException(nameof(LastName)));
         }
+    }
 
-        [Fact]
-        public void Init_accessor_and_readonly_fields_introduce()
-        {
-            var person = new InitAccessorAndReadOnlyFieldsPerson { FirstName = "Harold", LastName = "Triggerman" };
-        }
+    [Fact]
+    public void Init_accessor_and_readonly_fields_introduce()
+    {
+        var person = new InitAccessorAndReadOnlyFieldsPerson { FirstName = "Harold", LastName = "Triggerman" };
+    }
 
-        public record RecordPerson
-        {
-            public string? FirstName { get; init; }
-            public string? LastName { get; init; }
-        }
+    public record RecordPerson
+    {
+        public string? FirstName { get; init; }
+        public string? LastName { get; init; }
+    }
 
-        [Fact]
-        public void Record_is_immutable_like_a_value()
-        {
-            var person = new RecordPerson { FirstName = "Harold", LastName = "Triggerman" };
-            var otherPerson = person with { LastName = "Quail" };
+    [Fact]
+    public void Record_is_immutable_like_a_value()
+    {
+        var person = new RecordPerson { FirstName = "Harold", LastName = "Triggerman" };
+        var otherPerson = person with { LastName = "Quail" };
 
-            ReferenceEquals(person, otherPerson).Should().BeFalse();
-        }
+        ReferenceEquals(person, otherPerson).Should().BeFalse();
+    }
 
-        [Fact]
-        public void Record_is_immutable_like_a_value2()
-        {
-            var person = new RecordPerson { FirstName = "Harold", LastName = "Quail" };
-            var otherPerson = new RecordPerson { FirstName = "Harold", LastName = "Quail" };
+    [Fact]
+    public void Record_is_immutable_like_a_value2()
+    {
+        var person = new RecordPerson { FirstName = "Harold", LastName = "Quail" };
+        var otherPerson = new RecordPerson { FirstName = "Harold", LastName = "Quail" };
 
-            ReferenceEquals(person, otherPerson).Should().BeFalse();
+        ReferenceEquals(person, otherPerson).Should().BeFalse();
 
-            person.GetHashCode().Equals(otherPerson.GetHashCode()).Should().BeTrue();
+        person.GetHashCode().Equals(otherPerson.GetHashCode()).Should().BeTrue();
 
-            (person == otherPerson).Should().BeTrue();
+        (person == otherPerson).Should().BeTrue();
 
-            person.Equals(otherPerson).Should().BeTrue();
-        }
+        person.Equals(otherPerson).Should().BeTrue();
     }
 }
